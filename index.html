@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNDATA &amp; Network Registry</title>
+    <style>
+        :root {
+            --un-blue: #009edb;
+            --un-dark-blue: #005587;
+            --un-navy: #003359;
+            --un-light-bg: #f4f7f9;
+            --un-border: #d1d9e0;
+            --text-main: #222222;
+            --text-muted: #596570;
+            --status-active: #1e7e34;
+            --status-archive: #856404;
+            --status-restricted: #bd2130;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--un-light-bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Top Institutional Bar */
+        .un-top-bar {
+            background-color: #ebebeb;
+            border-bottom: 1px solid #cccccc;
+            font-size: 12px;
+            color: #444444;
+            padding: 6px 0;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .top-bar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .un-emblem-mini {
+            width: 16px;
+            height: 16px;
+            fill: var(--un-blue);
+        }
+
+        .top-bar-right span {
+            color: #555555;
+            margin-left: 15px;
+        }
+
+        /* Main Header */
+        header {
+            background-color: #ffffff;
+            border-bottom: 4px solid var(--un-blue);
+            padding: 22px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .un-logo-box {
+            width: 54px;
+            height: 54px;
+            background-color: var(--un-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .brand-titles h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--un-navy);
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+
+        .brand-titles h1 span {
+            color: var(--un-blue);
+            font-weight: 300;
+        }
+
+        .brand-titles p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .meta-badge {
+            background-color: var(--un-light-bg);
+            border: 1px solid var(--un-border);
+            padding: 8px 14px;
+            font-size: 12px;
+            color: var(--un-navy);
+            text-align: right;
+        }
+
+        .meta-badge strong {
+            display: block;
+            color: var(--un-blue);
+            font-size: 13px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: var(--un-dark-blue);
+            color: #ffffff;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .nav-list li a {
+            display: block;
+            padding: 11px 18px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            transition: background 0.2s;
+        }
+
+        .nav-list li a:hover,
+        .nav-list li a.active {
+            background-color: var(--un-blue);
+        }
+
+        /* Hero / Search Panel */
+        .search-banner {
+            background: linear-gradient(135deg, var(--un-navy) 0%, var(--un-dark-blue) 100%);
+            color: #ffffff;
+            padding: 28px 0;
+            margin-bottom: 24px;
+        }
+
+        .search-banner h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 14px;
+        }
+
+        .search-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+        }
+
+        .search-controls input,
+        .search-controls select {
+            padding: 10px 12px;
+            border: 1px solid #ffffff;
+            border-radius: 2px;
+            font-size: 14px;
+            background-color: #ffffff;
+            color: var(--text-main);
+        }
+
+        .btn-reset {
+            background-color: var(--un-blue);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-reset:hover {
+            background-color: #0082b4;
+        }
+
+        /* KPI Summary Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: #ffffff;
+            border: 1px solid var(--un-border);
+            border-top: 3px solid var(--un-blue);
+            padding: 16px;
+        }
+
+        .kpi-card.alert-card {
+            border-top-color: var(--status-restricted);
+        }
+
+        .kpi-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.6px;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--un-navy);
+            margin: 6px 0 2px;
+        }
+
+        .kpi-card.alert-card .kpi-value {
+            color: var(--status-restricted);
+        }
+
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Security Advisory Banner */
+        .advisory-bar {
+            background-color: #fdf2f2;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid var(--status-restricted);
+            color: #721c24;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            font-size: 13px;
+        }
+
+        /* Main Data Section */
+        .data-panel {
+            background: #ffffff;
+            border: 1px solid var(--un-border);
+            margin-bottom: 30px;
+        }
+
+        .panel-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--un-border);
+            background-color: #fafbfc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+            color: var(--un-navy);
+            font-weight: 600;
+        }
+
+        .record-count {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead th {
+            background-color: #eef3f7;
+            color: var(--un-navy);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--un-blue);
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 13px 16px;
+            border-bottom: 1px solid var(--un-border);
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background-color: #f4f9fc;
+        }
+
+        .code-id {
+            font-family: "Courier New", Courier, monospace;
+            font-weight: 700;
+            color: var(--un-dark-blue);
+            background: #e8f4fa;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .domain-title {
+            font-weight: 600;
+            color: var(--un-navy);
+            font-size: 14px;
+            display: block;
+        }
+
+        .domain-url {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 12px;
+            color: var(--un-blue);
+            text-decoration: none;
+        }
+
+        .domain-url:hover {
+            text-decoration: underline;
+        }
+
+        .tag-sector {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: #eef3f7;
+            color: var(--un-navy);
+            border: 1px solid #cbd6e2;
+            border-radius: 2px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 2px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-operational {
+            color: var(--status-active);
+            background-color: #eaf6ed;
+        }
+        .status-operational .status-dot { background-color: var(--status-active); }
+
+        .status-archived {
+            color: var(--status-archive);
+            background-color: #fef8e7;
+        }
+        .status-archived .status-dot { background-color: var(--status-archive); }
+
+        .status-restricted {
+            color: var(--status-restricted);
+            background-color: #fceaea;
+            border: 1px solid #f5c6cb;
+        }
+        .status-restricted .status-dot { background-color: var(--status-restricted); }
+
+        .btn-inspect {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: var(--un-dark-blue);
+            border: 1px solid var(--un-dark-blue);
+            text-decoration: none;
+            border-radius: 2px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .btn-inspect:hover {
+            background-color: var(--un-dark-blue);
+            color: #ffffff;
+        }
+
+        /* Methodology Footnote */
+        .methodology-box {
+            background-color: #ffffff;
+            border-left: 4px solid var(--un-dark-blue);
+            border-top: 1px solid var(--un-border);
+            border-right: 1px solid var(--un-border);
+            border-bottom: 1px solid var(--un-border);
+            padding: 16px 20px;
+            margin-bottom: 30px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .methodology-box h4 {
+            color: var(--un-navy);
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222222;
+            color: #cccccc;
+            padding: 28px 0;
+            font-size: 12px;
+            border-top: 4px solid var(--un-blue);
+        }
+
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links span {
+            color: #aaaaaa;
+            margin-left: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .search-controls {
+                grid-template-columns: 1fr;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="un-top-bar">
+        <div class="container top-bar-inner">
+            <div class="top-bar-left">
+                <svg class="un-emblem-mini" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                <span>Department of Global Digital Infrastructure &amp; Security Monitoring</span>
+            </div>
+            <div class="top-bar-right">
+                <span>UN-ICANN Joint Oversight Protocol</span>
+                <span>Language: English (Official)</span>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container header-content">
+            <div class="brand-block">
+                <div class="un-logo-box" title="United Nations Network Registry">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm7.93 9h-3.95a15.65 15.65 0 0 0-1.38-5.01A8.03 8.03 0 0 1 19.93 11zM12 4.04c1.21 1.44 2.13 3.74 2.38 6.96H9.62c.25-3.22 1.17-5.52 2.38-6.96zM4.07 13h3.95a15.65 15.65 0 0 0 1.38 5.01A8.03 8.03 0 0 1 4.07 13zm3.95-2H4.07a8.03 8.03 0 0 1 5.33-5.01A15.65 15.65 0 0 0 8.02 11zm3.98 8.96c-1.21-1.44-2.13-3.74-2.38-6.96h4.76c-.25 3.22-1.17 5.52-2.38 6.96zM14.6 18.01A15.65 15.65 0 0 0 15.98 13h3.95a8.03 8.03 0 0 1-5.33 5.01z"/>
+                    </svg>
+                </div>
+                <div class="brand-titles">
+                    <h1>UN<span>DATA</span> &mdash; WEB DATABASE</h1>
+                    <p>International Registry of Monitored State Domains &amp; Network Nodes</p>
+                </div>
+            </div>
+            <div class="meta-badge">
+                <strong>SECURITY BULLETIN: REV. 2287.2</strong>
+                <span>Classification: Public Statistical Mirror</span>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#registry" class="active">Domain Registry</a></li>
+                <li><a href="#methodology">Security Classification</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="search-banner">
+        <div class="container">
+            <h2>Query Monitored Sovereign Domains &amp; State Infrastructure Endpoints</h2>
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="Search by domain (e.g. ornanlands.de), state name, or UN registry code...">
+                <select id="sectorFilter">
+                    <option value="ALL">All Classifications</option>
+                    <option value="Sovereign State">Sovereign State</option>
+                    <option value="Unrecognized State">Unrecognized State</option>
+                    <option value="State Network">State Network Node</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="ALL">All Security Statuses</option>
+                    <option value="Restricted">Restricted (High-Risk State)</option>
+                    <option value="Operational">Operational</option>
+                    <option value="Archived">Archived</option>
+                </select>
+                <button class="btn-reset" onclick="resetFilters()">Reset Query</button>
+            </div>
+        </div>
+    </section>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Indexed State Domains</div>
+                <div class="kpi-value" id="kpiTotal">0</div>
+                <div class="kpi-sub">Registered endpoints</div>
+            </div>
+            <div class="kpi-card alert-card">
+                <div class="kpi-label">Restricted Jurisdictions</div>
+                <div class="kpi-value" id="kpiRestricted">0</div>
+                <div class="kpi-sub">Flagged high-risk state portals</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Monitoring Protocol</div>
+                <div class="kpi-value">ACTIVE</div>
+                <div class="kpi-sub">24/7 Gateway Telemetry</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Reporting Cycle</div>
+                <div class="kpi-value">2026</div>
+                <div class="kpi-sub">Global Telecommunications Audit</div>
+            </div>
+        </div>
+
+        <section class="data-panel" id="registry">
+            <div class="panel-header">
+                <h3>Official Registry of Monitored State Web Domains</h3>
+                <span class="record-count" id="recordCount">Showing 0 of 0 records</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registry ID</th>
+                            <th>Domain &amp; Official Designation</th>
+                            <th>Jurisdiction / State</th>
+                            <th>Classification</th>
+                            <th>Security Status</th>
+                            <th>Endpoint</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registryBody">
+                        <!-- Populated automatically from the JavaScript array below -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="methodology-box" id="methodology">
+            <h4>Classification &amp; Risk Assessment Methodology</h4>
+            <p>
+                The <strong>United Nations Global Sovereign Domain Registry</strong> catalogues official state portals and national network gateways across recognized and non-standard top-level domains. Domains designated as <strong>Restricted</strong> are operated by jurisdictions flagged by the International Telecommunications Security Committee due to elevated geopolitical risk, unverified cryptographic governance, or regional instability.
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <strong>UNITED NATIONS STATISTICAL &amp; TELECOMMUNICATIONS DIVISION</strong><br>
+                Global Sovereign Web Registry &mdash; Public Archival Mirror.
+            </div>
+            <div class="footer-links">
+                <span>Terms of Use</span>
+                <span>Data Governance</span>
+                <span>Security Protocols</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // [HOW TO ADD NEW SITES / КАК ДОБАВЛЯТЬ НОВЫЕ САЙТЫ]
+        //
+        // Copy one block inside { ... }, paste it after the last comma, and edit:
+        //   id:           Unique code (e.g. "UN-REG-003")
+        //   name:         Official title of the website
+        //   domain:       Domain name shown in the table (e.g. "example.gov")
+        //   jurisdiction: Country / State name
+        //   sector:       "Sovereign State", "Unrecognized State" or "State Network"
+        //   status:       "Restricted", "Operational", or "Archived"
+        //   description:  Short official UN-style description of the site
+        //   url:          Direct link to the site folder or URL
+        // =========================================================================
+
+        const sitesDatabase = [
+            // --- SITE 1: ORNANLANDS ---
+            {
+                id: "UN-REG-001",
+                name: "WEHRSTAAT ORNANLÄNDS",
+                domain: "ornanlands.de",
+                jurisdiction: "Wehrstaat Ornanlands",
+                sector: "Unrecognized State",
+                status: "Restricted",
+                description: "The most dangerous registered state portal belongs to Wehrstaat Ornanlans, which is the most dangerous nationalist state in the world.",
+                url: "https://madnesstoostudio.github.io/syncdom/ornanlands.de/"
+            },
+
+            // --- SITE 2: UWULAND ---
+            {
+                id: "UN-REG-002",
+                name: "ニャシュランド親衛隊",
+                domain: "uwuland.uwu",
+                jurisdiction: "Orden Uwuland",
+                sector: "Unrecognized State",
+                status: "Restricted",
+                description: "A dangerous website belonging to the Orden Uwuland, controlled by an ultra-feminists",
+                url: "https://madnesstoostudio.github.io/syncdom/uwuland.uwu/"
+            }
+
+            // ---> ADD NEW SITES BELOW THIS LINE (put a comma after the closing } above) <---
+
+        ];
+
+        // =========================================================================
+        // END OF SITES DATABASE (DO NOT EDIT BELOW UNLESS CHANGING LOGIC)
+        // =========================================================================
+
+        const registryBody = document.getElementById("registryBody");
+        const searchInput = document.getElementById("searchInput");
+        const sectorFilter = document.getElementById("sectorFilter");
+        const statusFilter = document.getElementById("statusFilter");
+        const recordCount = document.getElementById("recordCount");
+
+        function renderTable(data) {
+            registryBody.innerHTML = "";
+
+            if (data.length === 0) {
+                registryBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding: 28px; color: #596570;">
+                            No matching state domain records found for the specified query.
+                        </td>
+                    </tr>
+                `;
+                recordCount.textContent = `Showing 0 of ${sitesDatabase.length} records`;
+                return;
+            }
+
+            data.forEach(item => {
+                let statusClass = "status-restricted";
+                if (item.status === "Operational") statusClass = "status-operational";
+                if (item.status === "Archived") statusClass = "status-archived";
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><span class="code-id">${item.id}</span></td>
+                    <td>
+                        <span class="domain-title">${item.name}</span>
+                        <a href="${item.url}" target="_blank" class="domain-url">${item.domain}</a>
+                        <div style="font-size: 12px; color: #596570; margin-top: 4px;">${item.description}</div>
+                    </td>
+                    <td><strong>${item.jurisdiction}</strong></td>
+                    <td><span class="tag-sector">${item.sector}</span></td>
+                    <td>
+                        <span class="status-pill ${statusClass}">
+                            <span class="status-dot"></span>${item.status}
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn-inspect" href="${item.url}" target="_blank">Access Endpoint</a>
+                    </td>
+                `;
+                registryBody.appendChild(row);
+            });
+
+            recordCount.textContent = `Showing ${data.length} of ${sitesDatabase.length} records`;
+        }
+
+        function updateKPIs() {
+            document.getElementById("kpiTotal").textContent = sitesDatabase.length;
+            const restrictedCount = sitesDatabase.filter(d => d.status === "Restricted").length;
+            document.getElementById("kpiRestricted").textContent = restrictedCount;
+        }
+
+        function filterDatabase() {
+            const query = searchInput.value.toLowerCase().trim();
+            const sector = sectorFilter.value;
+            const status = statusFilter.value;
+
+            const filtered = sitesDatabase.filter(item => {
+                const matchesQuery =
+                    item.id.toLowerCase().includes(query) ||
+                    item.name.toLowerCase().includes(query) ||
+                    item.domain.toLowerCase().includes(query) ||
+                    item.jurisdiction.toLowerCase().includes(query) ||
+                    item.description.toLowerCase().includes(query);
+
+                const matchesSector = sector === "ALL" || item.sector === sector;
+                const matchesStatus = status === "ALL" || item.status === status;
+
+                return matchesQuery && matchesSector && matchesStatus;
+            });
+
+            renderTable(filtered);
+        }
+
+        function resetFilters() {
+            searchInput.value = "";
+            sectorFilter.value = "ALL";
+            statusFilter.value = "ALL";
+            renderTable(sitesDatabase);
+        }
+
+        searchInput.addEventListener("input", filterDatabase);
+        sectorFilter.addEventListener("change", filterDatabase);
+        statusFilter.addEventListener("change", filterDatabase);
+
+        // Initialize
+        updateKPIs();
+        renderTable(sitesDatabase);
+    </script>
+</body>
+</html>
